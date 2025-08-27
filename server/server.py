@@ -1,16 +1,31 @@
 from flask import Flask, request, jsonify
 import util
+from flask_cors import CORS
+
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
-@app.route("/classify_image",methods = ["GET","POST"])
+@app.route("/classify_image", methods=["POST"])
 def classify_image():
-    image_data = request.form["image_data"]
+    # Check if Content-Type is JSON or form data
+    if request.is_json:
+        data = request.get_json()
+        image_data = data.get("image_data") if data else None
+    else:
+        image_data = request.form.get("image_data")
 
-    response = jsonify(util.classify_image(image_data))
-    response.headers.add("Access-Control-Allow-Origin","*")
-    return response
+    if not image_data:
+        return jsonify({"error": "Missing image_data"}), 400
+
+    try:
+        # Call your utility function to classify the image
+        result = util.classify_image(image_data)
+        return jsonify(result)
+    except Exception as e:
+        # Handle exceptions gracefully
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    print("Starting python Flask Server")
-    util.load_saved_artifacts()
-    app.run(port = 5000)
+    print("Starting Python Flask Server")
+    util.load_saved_artifacts()  # Load your model/artifacts here
+    app.run(port=5000, debug=True)
