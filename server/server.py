@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify, render_template
 from . import util
 from flask_cors import CORS
 
-# Initialize Flask app and specify template folder path relative to this file
+# Flask app with correct template and static folders
 app = Flask(__name__, template_folder="../UI", static_folder="../UI/static")
 CORS(app)  # Enable CORS for all routes
 
