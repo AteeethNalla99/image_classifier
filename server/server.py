@@ -3,15 +3,13 @@ from flask import Flask, request, jsonify, render_template
 from . import util
 from flask_cors import CORS
 
-
-app = Flask(__name__)
+# Initialize Flask app and specify template folder path relative to this file
+app = Flask(__name__, template_folder="../UI")
 CORS(app)  # Enable CORS for all routes
-
 
 @app.route("/")
 def home():
     return render_template("app.html")
-
 
 @app.route("/classify_image", methods=["POST"])
 def classify_image():
@@ -32,7 +30,6 @@ def classify_image():
     except Exception as e:
         # Handle exceptions gracefully
         return jsonify({"error": str(e)}), 500
-
 
 if __name__ == "__main__":
     print("Starting Python Flask Server")
