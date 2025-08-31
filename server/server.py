@@ -1,15 +1,10 @@
-import os
-from flask import Flask, request, jsonify, render_template
-from . import util
+
+from flask import Flask, request, jsonify
+import util
 from flask_cors import CORS
 
-# Flask app with correct template and static folders
-app = Flask(__name__, template_folder="../UI", static_folder="../UI/static")
+app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
-
-@app.route("/")
-def home():
-    return render_template("app.html")
 
 @app.route("/classify_image", methods=["POST"])
 def classify_image():
@@ -34,5 +29,5 @@ def classify_image():
 if __name__ == "__main__":
     print("Starting Python Flask Server")
     util.load_saved_artifacts()  # Load your model/artifacts here
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port, debug=True)
+    app.run(port=5000, debug=True)
+    app.run(debug=True)
